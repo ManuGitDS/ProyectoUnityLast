@@ -1,22 +1,26 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Personaje : MonoBehaviour
 {
-
-    public float velocidadMovimiento = 5.0f;
+    public float velocidadNormal = 5.0f;
+    public float velocidadMovimiento;
+    public float turbo = 10.0f;
     public float velocidadRotacion = 200.0f;
+    public Vector3 direccionSalto;
 
     private Animator anim;
-    public float x,y;
+    public float x, y;
 
 
     public Rigidbody rb;
     public float fuerzaSalto = 5f;
     public bool puedoSaltar;
+    public bool estaEnElSuelo;
 
 
     //////////////movimiento con mouse///////////////
@@ -34,12 +38,13 @@ public class Personaje : MonoBehaviour
 
     void Start()
     {
-        
+        estaEnElSuelo = true;
         puedoSaltar = false;
         anim = GetComponent<Animator>();
 
         puedoSaltar = false;
         anim = GetComponent<Animator>();
+
 
         // Verifica que la cámara haya sido asignada
         if (camara == null)
@@ -53,10 +58,34 @@ public class Personaje : MonoBehaviour
     //Estandariza los frames en todos los PC
     private void FixedUpdate()
     {
+        if (puedoSaltar)
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                velocidadMovimiento = turbo;
+            }
+            else
+            {
+                velocidadMovimiento = velocidadNormal;
+
+            }
+
+
+        }
         //MOVERSE LATERALMENTE CON 'X' Y HACIA ADELANTE/ATRÁS CON 'Y'
-        Vector3 movimientoLateral = transform.right * x * velocidadMovimiento * Time.deltaTime;
-        Vector3 movimientoAdelante = transform.forward * y * velocidadMovimiento * Time.deltaTime;
-        transform.position += movimientoLateral + movimientoAdelante;
+        if (!estaEnElSuelo)
+        {
+            // Moverse en la dirección guardada al saltar
+            Vector3 movimientoLateral = direccionSalto * velocidadMovimiento * Time.deltaTime;
+            transform.position += movimientoLateral;
+        }
+        else
+        {
+            // Solo permite el movimiento normal cuando está en el suelo
+            Vector3 movimientoLateral = transform.right * x * velocidadMovimiento * Time.deltaTime;
+            Vector3 movimientoAdelante = transform.forward * y * velocidadMovimiento * Time.deltaTime;
+            transform.position += movimientoLateral + movimientoAdelante;
+        }
 
 
         //ROTACIÓN DEL PERSONAJE CON 'Q' Y 'E'
@@ -93,7 +122,7 @@ public class Personaje : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         y = Input.GetAxis("Vertical");
 
-        anim.SetFloat("VelX",x);
+        anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
 
         // Activar rotación con mouse mientras el botón derecho está presionado
@@ -111,6 +140,8 @@ public class Personaje : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 anim.SetBool("Salto", true);
+                // Al saltar, guardamos la dirección en la que nos movíamos
+                direccionSalto = transform.forward * y + transform.right * x;
                 rb.AddForce(new Vector3(x, fuerzaSalto, 0), ForceMode.Impulse);
             }
 
@@ -119,14 +150,14 @@ public class Personaje : MonoBehaviour
         else
         {
             estoyCayendo();
-            
+
         }
     }
 
     public void estoyCayendo()
     {
         anim.SetBool("tocaSuelo", false);
-        anim.SetBool("Salto",false);
+        anim.SetBool("Salto", false);
     }
 
 
@@ -138,6 +169,21 @@ public class Personaje : MonoBehaviour
         if (collision.gameObject.CompareTag("Suelo"))
         {
             Muerte(); // Llama al método Muerte
+        }
+
+        if (collision.gameObject.CompareTag("Plataforma"))
+        {
+            estaEnElSuelo = true;
+
+        }
+
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        // Verifica si deja de tocar el suelo
+        if (collision.gameObject.CompareTag("Plataforma"))
+        {
+            estaEnElSuelo = false; // Está en el aire
         }
     }
     private void Muerte()
