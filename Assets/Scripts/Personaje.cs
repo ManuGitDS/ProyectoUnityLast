@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,9 +14,11 @@ public class Personaje : MonoBehaviour
     public float velocidadRotacion = 200.0f;
     public Vector3 direccionSalto;
 
+ 
+
     private Animator anim;
     public float x, y;
-
+    public bool estoySaltando = false;
 
     public Rigidbody rb;
     public float fuerzaSalto = 5f;
@@ -38,6 +41,7 @@ public class Personaje : MonoBehaviour
 
     void Start()
     {
+
         estaEnElSuelo = true;
         puedoSaltar = false;
         anim = GetComponent<Animator>();
@@ -73,6 +77,7 @@ public class Personaje : MonoBehaviour
 
         }
         //MOVERSE LATERALMENTE CON 'X' Y HACIA ADELANTE/ATRÁS CON 'Y'
+
         if (!estaEnElSuelo)
         {
             // Moverse en la dirección guardada al saltar
@@ -143,9 +148,14 @@ public class Personaje : MonoBehaviour
                 // Al saltar, guardamos la dirección en la que nos movíamos
                 direccionSalto = transform.forward * y + transform.right * x;
                 rb.AddForce(new Vector3(x, fuerzaSalto, 0), ForceMode.Impulse);
+                estoySaltando = true;
+               
+
+
             }
 
             anim.SetBool("tocaSuelo", true);
+         
         }
         else
         {
@@ -163,8 +173,12 @@ public class Personaje : MonoBehaviour
 
 
     //muerte del personaje con suelo
+
     private void OnCollisionEnter(Collision collision)
     {
+      
+       // Debug.Log("estaEnElSuelo = true");/////////////////////////////////////
+        
         // Verifica si el objeto con el que colisionaste es el suelo
         if (collision.gameObject.CompareTag("Suelo"))
         {
@@ -174,24 +188,40 @@ public class Personaje : MonoBehaviour
         if (collision.gameObject.CompareTag("Plataforma"))
         {
             estaEnElSuelo = true;
-
+            estoySaltando = false;
         }
 
     }
     private void OnCollisionExit(Collision collision)
     {
+      
+        //Debug.Log("estaEnElSuelo = false");/////////////////////////////////////
         // Verifica si deja de tocar el suelo
-        if (collision.gameObject.CompareTag("Plataforma"))
+        if (collision.gameObject.CompareTag("Plataforma") & estoySaltando)
         {
             estaEnElSuelo = false; // Está en el aire
+          
         }
     }
     private void Muerte()
     {
-        // Aquí puedes definir lo que ocurre cuando el personaje muere
+        
         Debug.Log("¡Has muerto!");
 
         // Ejemplo: Reiniciar la escena
         SceneManager.LoadScene(1); //SceneManager.GetActiveScene().name carga el inicio de la escena actual
     }
+
+
+
+    ////////////////Recogida de monedas////////////////////////
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Moneda"))
+        {
+            Debug.Log("Contacto");
+        }
+        
+    }
+
 }

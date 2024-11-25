@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Suelo
   - Plataforma
+  - Moneda
   layers:
   - Default
   - TransparentFX
