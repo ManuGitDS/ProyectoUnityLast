@@ -213,15 +213,14 @@ public class Personaje : MonoBehaviour
     }
 
 
-
-    ////////////////Recogida de monedas////////////////////////
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Moneda"))
         {
             Debug.Log("Contacto");
+            Destroy(other.gameObject);
         }
-        
+
     }
 
 }
