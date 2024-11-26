@@ -18,7 +18,7 @@ public class RecogidaObjetos : MonoBehaviour
             if (other.gameObject.CompareTag("Moneda"))
             {
                 Debug.Log("Contacto");
-                Destroy(gameObject);
+                Destroy(other.gameObject);
             }
 
         }

@@ -2,9 +2,11 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Personaje : MonoBehaviour
 {
@@ -34,6 +36,11 @@ public class Personaje : MonoBehaviour
     public Transform camara;
     private float rotacionCamaraX = 0f; // Para manejar la rotación hacia arriba y hacia abajo
 
+    //puntuacion
+    private string objeto = "Moneda: ";
+    private int puntuacion;
+    public TextMeshProUGUI puntuacionText;
+
 
 
 
@@ -41,7 +48,7 @@ public class Personaje : MonoBehaviour
 
     void Start()
     {
-
+        puntuacion = 0;
         estaEnElSuelo = true;
         puedoSaltar = false;
         anim = GetComponent<Animator>();
@@ -218,6 +225,9 @@ public class Personaje : MonoBehaviour
         if (other.gameObject.CompareTag("Moneda"))
         {
             Debug.Log("Contacto");
+            
+            puntuacion++;
+            puntuacionText.text = objeto+ puntuacion.ToString();
             Destroy(other.gameObject);
         }
 
