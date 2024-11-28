@@ -216,7 +216,7 @@ public class Personaje : MonoBehaviour
         Debug.Log("¡Has muerto!");
 
         // Ejemplo: Reiniciar la escena
-        SceneManager.LoadScene(1); //SceneManager.GetActiveScene().name carga el inicio de la escena actual
+        SceneManager.LoadScene(2); //SceneManager.GetActiveScene().name carga el inicio de la escena actual
     }
 
 

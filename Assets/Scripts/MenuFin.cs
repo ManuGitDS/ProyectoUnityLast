@@ -7,7 +7,7 @@ public class MenuFin : MonoBehaviour
 {
    public void VolverEmpezar()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
         Debug.Log("Cambi a escena 0!");
     }
     public void inicio()
