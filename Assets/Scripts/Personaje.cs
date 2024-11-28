@@ -37,7 +37,7 @@ public class Personaje : MonoBehaviour
     private float rotacionCamaraX = 0f; // Para manejar la rotación hacia arriba y hacia abajo
 
     //puntuacion
-    private string objeto = "Moneda: ";
+  
     private int puntuacion;
     public TextMeshProUGUI puntuacionText;
 
@@ -221,13 +221,14 @@ public class Personaje : MonoBehaviour
 
 
     private void OnTriggerEnter(Collider other)
+
     {
         if (other.gameObject.CompareTag("Moneda"))
         {
             Debug.Log("Contacto");
-            
+            other.gameObject.SetActive(false);
             puntuacion++;
-            puntuacionText.text = objeto+ puntuacion.ToString();
+            puntuacionText.text = puntuacion.ToString();
             Destroy(other.gameObject);
         }
 
