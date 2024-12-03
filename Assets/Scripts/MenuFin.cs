@@ -15,4 +15,5 @@ public class MenuFin : MonoBehaviour
        SceneManager.LoadScene(0);
         Debug.Log("Cambi a escena 0!");
     }
+   
 }

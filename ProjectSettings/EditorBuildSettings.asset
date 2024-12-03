@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HasMuerto.unity
     guid: 7ff9322c53939184f95499a1592ec992
+  - enabled: 1
+    path: Assets/Scenes/MenuWinner.unity
+    guid: 76c224c88b3417641b0f94590508d940
   m_configObjects: {}

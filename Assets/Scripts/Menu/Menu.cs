@@ -14,4 +14,10 @@ public class Menu : MonoBehaviour
         Application.Quit();
         Debug.Log("Se cerro el juego");
     }
+    public void ComenzarNivel2(string NombreNivel)
+    {
+        SceneManager.LoadScene(3);
+    }
+   
+
 }
