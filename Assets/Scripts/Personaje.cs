@@ -32,9 +32,9 @@ public class Personaje : MonoBehaviour
     public bool rotacionConMouse;
     public float sensibilidadMouse = 1000.0f;
 
-    //variable para la cámara
+    //variable para la cï¿½mara
     public Transform camara;
-    private float rotacionCamaraX = 0f; // Para manejar la rotación hacia arriba y hacia abajo
+    private float rotacionCamaraX = 0f; // Para manejar la rotaciï¿½n hacia arriba y hacia abajo
 
     //puntuacion
   
@@ -57,10 +57,10 @@ public class Personaje : MonoBehaviour
         anim = GetComponent<Animator>();
 
 
-        // Verifica que la cámara haya sido asignada
+        // Verifica que la cï¿½mara haya sido asignada
         if (camara == null)
         {
-            camara = Camera.main.transform; // Asigna automáticamente la Main Camera
+            camara = Camera.main.transform; // Asigna automï¿½ticamente la Main Camera
         }
 
 
@@ -83,46 +83,46 @@ public class Personaje : MonoBehaviour
 
 
         }
-        //MOVERSE LATERALMENTE CON 'X' Y HACIA ADELANTE/ATRÁS CON 'Y'
+        //MOVERSE LATERALMENTE CON 'X' Y HACIA ADELANTE/ATRï¿½S CON 'Y'
 
         if (!estaEnElSuelo)
         {
-            // Moverse en la dirección guardada al saltar
+            // Moverse en la direcciï¿½n guardada al saltar
             Vector3 movimientoLateral = direccionSalto * velocidadMovimiento * Time.deltaTime;
             transform.position += movimientoLateral;
         }
         else
         {
-            // Solo permite el movimiento normal cuando está en el suelo
+            // Solo permite el movimiento normal cuando estï¿½ en el suelo
             Vector3 movimientoLateral = transform.right * x * velocidadMovimiento * Time.deltaTime;
             Vector3 movimientoAdelante = transform.forward * y * velocidadMovimiento * Time.deltaTime;
             transform.position += movimientoLateral + movimientoAdelante;
         }
 
 
-        //ROTACIÓN DEL PERSONAJE CON 'Q' Y 'E'
+        //ROTACIï¿½N DEL PERSONAJE CON 'Q' Y 'E'
 
         if (Input.GetKey(KeyCode.Q))
         {
-            transform.Rotate(0, -velocidadRotacion * Time.deltaTime, 0); // Rotación a la izquierda
+            transform.Rotate(0, -velocidadRotacion * Time.deltaTime, 0); // Rotaciï¿½n a la izquierda
         }
         if (Input.GetKey(KeyCode.E))
         {
-            transform.Rotate(0, velocidadRotacion * Time.deltaTime, 0); // Rotación a la derecha
+            transform.Rotate(0, velocidadRotacion * Time.deltaTime, 0); // Rotaciï¿½n a la derecha
         }
 
         if (rotacionConMouse)
         {
-            // Rotación horizontal con el mouse (afecta al personaje)
+            // Rotaciï¿½n horizontal con el mouse (afecta al personaje)
             float mouseX = Input.GetAxis("Mouse X");
             transform.Rotate(0, mouseX * sensibilidadMouse * Time.deltaTime, 0);
 
-            // Rotación vertical con el mouse (afecta solo a la cámara)
+            // Rotaciï¿½n vertical con el mouse (afecta solo a la cï¿½mara)
             float mouseY = Input.GetAxis("Mouse Y");
             rotacionCamaraX -= mouseY * sensibilidadMouse * Time.deltaTime;
-            rotacionCamaraX = Mathf.Clamp(rotacionCamaraX, -90f, 90f); // Limita el ángulo vertical de la cámara
+            rotacionCamaraX = Mathf.Clamp(rotacionCamaraX, -90f, 90f); // Limita el ï¿½ngulo vertical de la cï¿½mara
 
-            camara.localRotation = Quaternion.Euler(rotacionCamaraX, 0, 0); // Aplica la rotación vertical a la cámara
+            camara.localRotation = Quaternion.Euler(rotacionCamaraX, 0, 0); // Aplica la rotaciï¿½n vertical a la cï¿½mara
         }
 
         /////////////////////////////
@@ -137,7 +137,7 @@ public class Personaje : MonoBehaviour
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
 
-        // Activar rotación con mouse mientras el botón derecho está presionado
+        // Activar rotaciï¿½n con mouse mientras el botï¿½n derecho estï¿½ presionado
         if (Input.GetMouseButtonDown(1)) // Click derecho presionado
         {
             rotacionConMouse = true;
@@ -152,7 +152,7 @@ public class Personaje : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 anim.SetBool("Salto", true);
-                // Al saltar, guardamos la dirección en la que nos movíamos
+                // Al saltar, guardamos la direcciï¿½n en la que nos movï¿½amos
                 direccionSalto = transform.forward * y + transform.right * x;
                 rb.AddForce(new Vector3(x, fuerzaSalto, 0), ForceMode.Impulse);
                 estoySaltando = true;
@@ -189,7 +189,7 @@ public class Personaje : MonoBehaviour
         // Verifica si el objeto con el que colisionaste es el suelo
         if (collision.gameObject.CompareTag("Suelo"))
         {
-            Muerte(); // Llama al método Muerte
+            Muerte(); // Llama al mï¿½todo Muerte
         }
 
         if (collision.gameObject.CompareTag("Plataforma"))
@@ -206,32 +206,41 @@ public class Personaje : MonoBehaviour
         // Verifica si deja de tocar el suelo
         if (collision.gameObject.CompareTag("Plataforma") & estoySaltando)
         {
-            estaEnElSuelo = false; // Está en el aire
+            estaEnElSuelo = false; // Estï¿½ en el aire
           
         }
     }
     private void Muerte()
     {
         
-        Debug.Log("¡Has muerto!");
+        Debug.Log("ï¿½Has muerto!");
 
         // Ejemplo: Reiniciar la escena
         SceneManager.LoadScene(2); //SceneManager.GetActiveScene().name carga el inicio de la escena actual
     }
 
-
+     public int maxMonedas = 15;
     private void OnTriggerEnter(Collider other)
-
     {
         if (other.gameObject.CompareTag("Moneda"))
         {
             Debug.Log("Contacto");
-            other.gameObject.SetActive(false);
-            puntuacion++;
-            puntuacionText.text = puntuacion.ToString();
-            Destroy(other.gameObject);
-        }
+            other.gameObject.SetActive(false); // Desactiva la moneda
+            puntuacion++; // Incrementa la puntuaciÃ³n
+            puntuacionText.text = puntuacion.ToString(); // Actualiza el texto de puntuaciÃ³n
+            Destroy(other.gameObject); // Destruye la moneda para liberar memoria
 
+            // Comprueba si has alcanzado el nÃºmero mÃ¡ximo de monedas
+            if (puntuacion >= maxMonedas)
+            {
+                hasGanado(); // Llama al mÃ©todo para cambiar de escena
+            }
+        }
+    }
+    private void hasGanado()
+    {
+        Debug.Log("Has recogido todas las monedas. Cambiando de escena...");
+        SceneManager.LoadScene(3); // Sustituye "NombreDeTuEscena" por el nombre de tu escena
     }
 
 }

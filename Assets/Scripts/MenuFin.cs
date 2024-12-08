@@ -16,4 +16,5 @@ public class MenuFin : MonoBehaviour
         Debug.Log("Cambi a escena 0!");
     }
    
+   
 }
